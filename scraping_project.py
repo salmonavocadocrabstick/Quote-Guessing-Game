@@ -101,12 +101,9 @@ while again == "Y":
 	# Point to the next set of elements
 	try:
 		quote = quote.find_parent().find_next_sibling().find(class_="text")
-		print(quote.get_text())
 	except AttributeError:
 		next_page = url + next_page_url + str(current)
-		#print(next_page)
 		req = requests.get(next_page)
-		#print(req.text)
 		soup = BeautifulSoup(req.text, "html.parser")
 		current += 1
 		quote = soup.find(class_="text")
