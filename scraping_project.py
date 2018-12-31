@@ -36,8 +36,8 @@ def updateHintList(hint, hints):
 def getUserInput(prompt, error_message):
 	while True:
 		try:
-			guess = str(input(prompt))
-		except ValueError:
+			guess = input(prompt)
+		except Exception:
 			print(error_message)
 		else:
 			return guess
@@ -73,6 +73,7 @@ while again == "Y":
 	guess = getUserInput("Take a guess!(You have 4 chances.) \n\n", "Alphabets only!")
 	chance = 4
 	while chance is not 0 and again == "Y":
+		chance -= 1
 		if guess == author.get_text():
 			print("Congrats! You got it!")
 			break
@@ -82,8 +83,6 @@ while again == "Y":
 			#guess = input("Guess again.\n\n")
 			guess = getUserInput("Guess again.\n\n", "Alphabets only!")
 			hints = updateHintList(hint, hints)
-			chance -= 1
-
 		if chance == 0:
 			print(f"No more chances left! The answer : {author.get_text()}.  ")
 
