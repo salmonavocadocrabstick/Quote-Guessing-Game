@@ -47,7 +47,6 @@ req = requests.get(url)
 soup = BeautifulSoup(req.text, "html.parser")
 
 #Variables for looping
-
 again = "Y"
 
 # Get quote, author, about URL
@@ -57,9 +56,7 @@ while again != "N":
 
 	# Get quote, author, about URL
 	author = quote.find_next_sibling().find(class_="author")
-	#print(author.get_text())
 	about_url = url + author.find_next_sibling()["href"]
-	#about_url = url+soup.find(class_="author").find_next_sibling()["href"]
 
 	#Getting the about
 	about_req = requests.get(about_url)
@@ -68,6 +65,7 @@ while again != "N":
 	# Make hints with the above info
 	hints = make_hints(author.get_text(), about_soup)
 
+	# Game start
 	guess = input("Who said this?\n" + quote.get_text() + "Take a guess!(You have 4 chances.) \n\n")
 	chance = 4
 	while chance is not 0 and again == "Y":
@@ -84,6 +82,6 @@ while again != "N":
 		if chance == 0:
 			print(f"No more chances left! The answer : {author.get_text()}.  ")
 
+	# Point to the next set of elements
 	again = input("Do you want to play again? Y/N\n\n ").upper()
 	quote = quote.find_parent().find_next_sibling().find(class_="text")
-	author = soup.find_parent()
