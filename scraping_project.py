@@ -20,9 +20,10 @@ def make_hints(author, about_soup):
 
 	# Acheivment
 	desc = str(about_soup.find(class_="author-description").get_text()).split('.')
-	info = list(filter(lambda x : x == "His" or x == "Her", desc))
-	print(info)
-	#return hints
+	info = list(filter(lambda x : any(item == "His" or item =="Her" for item in x.split()), desc))
+	hints.append(info[0])
+
+	return hints
 
 def give_hint(hints):
 	hint = choice(hints)
@@ -45,7 +46,7 @@ again = "Y"
 # Get quote, author, about URL
 quote = soup.find(class_="text")
 
-while again != "N":
+while again == "Y":
 
 	# Get quote, author, about URL
 	author = quote.find_next_sibling().find(class_="author")
@@ -58,23 +59,23 @@ while again != "N":
 	# Make hints with the above info
 	hints = make_hints(author.get_text(), about_soup)
 
-# 	# Game start
-# 	guess = input("Who said this?\n" + quote.get_text() + "Take a guess!(You have 4 chances.) \n\n")
-# 	chance = 4
-# 	while chance is not 0 and again == "Y":
-# 		if guess == author.get_text():
-# 			print("Congrats! You got it!")
-# 			break
-# 		else:
-# 			hint = give_hint(hints)
-# 			print("Not quite. Here's a hint.\n" + hint)
-# 			guess = input("Guess again.\n\n")
-# 			hints = update_hint_list(hint, hints)
-# 			chance -= 1
+	# Game start
+	guess = input("Who said this?\n" + quote.get_text() + "Take a guess!(You have 4 chances.) \n\n")
+	chance = 4
+	while chance is not 0 and again == "Y":
+		if guess == author.get_text():
+			print("Congrats! You got it!")
+			break
+		else:
+			hint = give_hint(hints)
+			print("Not quite. Here's a hint.\n" + hint)
+			guess = input("Guess again.\n\n")
+			hints = update_hint_list(hint, hints)
+			chance -= 1
 
-# 		if chance == 0:
-# 			print(f"No more chances left! The answer : {author.get_text()}.  ")
+		if chance == 0:
+			print(f"No more chances left! The answer : {author.get_text()}.  ")
 
-# 	# Point to the next set of elements
-# 	again = input("Do you want to play again? Y/N\n\n ").upper()
-# 	quote = quote.find_parent().find_next_sibling().find(class_="text")
+	# Point to the next set of elements
+	again = input("Do you want to play again? Y/N\n\n ").upper()
+	quote = quote.find_parent().find_next_sibling().find(class_="text")

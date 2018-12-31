@@ -4,4 +4,11 @@ html = """In 1879, Albert Einstein was born in Ulm, Germany. He completed his Ph
 
 
 desc = html.split('.')
-print(desc)
+# print(desc)
+
+info = list(filter(lambda x : any(item == "His" or item =="her" for item in x.split()), desc))
+print(info)
+
+# for x in desc:
+# 	for item in x.split() :
+# 		print(item)
