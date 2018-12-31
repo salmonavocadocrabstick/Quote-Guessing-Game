@@ -47,12 +47,15 @@ hint_4 = went_to_college(desc)
 chance = 4
 again = "Y"
 
-guess = input("Who said this?\n" + quote + "Take a guess! \n\n")
-while chance is not 0 and again == "Y":
-	if guess == author:
-		print("Congrats! You got it!")
-		again = input("Play again? Y/N\n\n").upper()
-	else:
-		print("Not quite. Here's a hint.\n" + hint_1)
-		guess = input("Guess again.\n\n")
-		chance -= 1
+while again != "N":
+	guess = input("Who said this?\n" + quote + "Take a guess! \n\n")
+	while chance is not 0 and again == "Y":
+		if guess == author:
+			print("Congrats! You got it!")
+			break
+		else:
+			print("Not quite. Here's a hint.\n" + hint_1)
+			guess = input("Guess again.\n\n")
+			chance -= 1
+	again = input("Do you want to play again? Y/N\n\n ").upper()
+	chance = 4
