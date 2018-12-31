@@ -21,12 +21,18 @@ def makeHints(author, about_soup):
 	# Acheivment
 	desc = str(about_soup.find(class_="author-description").get_text()).split('.')
 	info = list(filter(lambda x : any(item == "His" or item =="Her" for item in x.split()), desc))
-	hints.append(info[0])
+	if info == []:
+		info = list(filter(lambda x : any(item == "He" or item =="She" for item in x.split()), desc))
+	if info != []:
+		hints.append(info[0])
 
 	return hints
 
 def giveHint(hints):
-	hint = choice(hints)
+	if hints != []:
+		hint = choice(hints)
+	else:
+		hint = "Oops! No more hints available for this person."
 	return hint
 
 def updateHintList(hint, hints):
@@ -71,7 +77,7 @@ while again == "Y":
 	# Game start
 	print("Who said this?\n" + quote.get_text()) 
 	guess = getUserInput("Take a guess!(You have 4 chances.) \n\n", "Alphabets only!")
-	chance = 4
+	chance = 3
 	while chance is not 0 and again == "Y":
 		chance -= 1
 		if guess == author.get_text():
@@ -83,7 +89,7 @@ while again == "Y":
 			#guess = input("Guess again.\n\n")
 			guess = getUserInput("Guess again.\n\n", "Alphabets only!")
 			hints = updateHintList(hint, hints)
-		if chance == 0:
+		if chance <= 0:
 			print(f"No more chances left! The answer : {author.get_text()}.  ")
 
 	# Point to the next set of elements
