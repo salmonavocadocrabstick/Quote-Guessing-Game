@@ -39,34 +39,39 @@ def update_hint_list(hint, hints):
 	hints.remove(hint)
 	return hints
 
+#----------------------------------------------------------------
 
 
 url = "http://quotes.toscrape.com"
 req = requests.get(url)
 soup = BeautifulSoup(req.text, "html.parser")
 
-# Get quote, author, about URL
-quote = soup.find(class_="text").get_text() 
-author = soup.find(class_="author").get_text() 
-about_url = url+soup.find(class_="author").find_next_sibling()["href"]
-
-#Getting the about
-about_req = requests.get(about_url)
-about_soup = BeautifulSoup(about_req.text, "html.parser")
-
-# Make hints with the above info
-hints = make_hints(author, about_soup)
-
-#----------------------------------------------------------------
-
 #Variables for looping
-chance = 4
+
 again = "Y"
 
+# Get quote, author, about URL
+quote = soup.find(class_="text")
+
 while again != "N":
-	guess = input("Who said this?\n" + quote + "Take a guess!(You have 4 chances.) \n\n")
+
+	# Get quote, author, about URL
+	author = quote.find_next_sibling().find(class_="author")
+	#print(author.get_text())
+	about_url = url + author.find_next_sibling()["href"]
+	#about_url = url+soup.find(class_="author").find_next_sibling()["href"]
+
+	#Getting the about
+	about_req = requests.get(about_url)
+	about_soup = BeautifulSoup(about_req.text, "html.parser")
+
+	# Make hints with the above info
+	hints = make_hints(author.get_text(), about_soup)
+
+	guess = input("Who said this?\n" + quote.get_text() + "Take a guess!(You have 4 chances.) \n\n")
+	chance = 4
 	while chance is not 0 and again == "Y":
-		if guess == author:
+		if guess == author.get_text():
 			print("Congrats! You got it!")
 			break
 		else:
@@ -77,6 +82,8 @@ while again != "N":
 			chance -= 1
 
 		if chance == 0:
-			print(f"No more chances left! The answer : {author}.  ")
+			print(f"No more chances left! The answer : {author.get_text()}.  ")
+
 	again = input("Do you want to play again? Y/N\n\n ").upper()
-	chance = 4
+	quote = quote.find_parent().find_next_sibling().find(class_="text")
+	author = soup.find_parent()
